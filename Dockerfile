@@ -4,7 +4,7 @@ FROM ubuntu:22.04
 # Configurar o ambiente para evitar interatividade
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Atualizar pacotes e instalar dependências com tentativas de retry
+# Atualizar pacotes e instalar dependências, incluindo automake e autoconf
 RUN apt-get update -y || apt-get update -y \
     && apt-get install -y \
     build-essential \
@@ -12,6 +12,8 @@ RUN apt-get update -y || apt-get update -y \
     libssl-dev \
     libjansson-dev \
     git \
+    automake \
+    autoconf \
     && rm -rf /var/lib/apt/lists/*
 
 # Clonar e compilar o cpuminer
