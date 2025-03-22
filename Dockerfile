@@ -1,8 +1,12 @@
 # Usar uma versão oficial do Ubuntu como base
 FROM ubuntu:22.04
 
-# Atualizar pacotes e instalar dependências
-RUN apt-get update && apt-get install -y \
+# Configurar o ambiente para evitar interatividade
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Atualizar pacotes e instalar dependências com tentativas de retry
+RUN apt-get update -y || apt-get update -y \
+    && apt-get install -y \
     build-essential \
     libcurl4-openssl-dev \
     libssl-dev \
