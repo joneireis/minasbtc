@@ -4,6 +4,10 @@ FROM ubuntu:22.04
 # Configurar o ambiente para evitar interatividade
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Forçar servidores DNS do Google
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf \
+    && echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+
 # Substituir os espelhos padrão do Ubuntu por um alternativo confiável
 RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirror.us.leaseweb.net/ubuntu|' /etc/apt/sources.list \
     && sed -i 's|http://security.ubuntu.com/ubuntu|http://mirror.us.leaseweb.net/ubuntu|' /etc/apt/sources.list
