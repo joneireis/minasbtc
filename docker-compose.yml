@@ -1,0 +1,11 @@
+version: "3"
+services:
+  minasbtc:
+    build: .
+    image: minasbtc:latest
+    container_name: minasbtc-miner
+    environment:
+      - WALLET_ADDRESS=${WALLET_ADDRESS}
+      - CPU_THREADS=${CPU_THREADS}
+      - POOL_URL=${POOL_URL}
+    restart: unless-stopped
