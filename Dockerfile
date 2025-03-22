@@ -4,8 +4,13 @@ FROM ubuntu:22.04
 # Configurar o ambiente para evitar interatividade
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Atualizar pacotes e instalar dependências, incluindo automake e autoconf
-RUN apt-get update -y || apt-get update -y \
+# Substituir os espelhos padrão do Ubuntu por um alternativo confiável
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu|http://mirror.us.leaseweb.net/ubuntu|' /etc/apt/sources.list \
+    && sed -i 's|http://security.ubuntu.com/ubuntu|http://mirror.us.leaseweb.net/ubuntu|' /etc/apt/sources.list
+
+# Atualizar pacotes e instalar dependências com retries
+RUN apt-get clean \
+    && apt-get update -y || apt-get update -y \
     && apt-get install -y \
     build-essential \
     libcurl4-openssl-dev \
