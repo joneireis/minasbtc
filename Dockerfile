@@ -1,5 +1,5 @@
-# Usar Ubuntu Core como base
-FROM ubuntu:core
+# Usar uma versão oficial do Ubuntu como base
+FROM ubuntu:22.04
 
 # Atualizar pacotes e instalar dependências
 RUN apt-get update && apt-get install -y \
