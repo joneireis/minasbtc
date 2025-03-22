@@ -4,6 +4,9 @@ services:
     build: .
     image: minasbtc:latest
     container_name: minasbtc-miner
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       - WALLET_ADDRESS=${WALLET_ADDRESS}
       - CPU_THREADS=${CPU_THREADS}
