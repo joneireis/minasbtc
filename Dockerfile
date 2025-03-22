@@ -1,6 +1,10 @@
 # Usar Alpine Linux como base
 FROM alpine:3.19
 
+# Forçar servidores DNS do Google
+RUN echo "nameserver 8.8.8.8" > /etc/resolv.conf \
+    && echo "nameserver 8.8.4.4" >> /etc/resolv.conf
+
 # Instalar dependências necessárias para compilar o cpuminer
 RUN apk update && apk add --no-cache \
     build-base \
