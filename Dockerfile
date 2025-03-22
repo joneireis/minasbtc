@@ -1,28 +1,31 @@
-# Usar uma imagem com dependências pré-instaladas
-FROM ubuntu:22.04 AS builder
+# Usar Alpine Linux como base
+FROM alpine:3.19
 
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Instalar dependências em uma camada separada
-RUN apt-get update -y && apt-get install -y \
-    build-essential \
-    libcurl4-openssl-dev \
-    libssl-dev \
-    libjansson-dev \
+# Instalar dependências necessárias para compilar o cpuminer
+RUN apk update && apk add --no-cache \
+    build-base \
+    curl-dev \
+    openssl-dev \
+    jansson-dev \
     git \
     automake \
     autoconf \
-    && git clone https://github.com/pooler/cpuminer.git /opt/cpuminer \
+    && rm -rf /var/cache/apk/*
+
+# Clonar e compilar o cpuminer
+RUN git clone https://github.com/pooler/cpuminer.git /opt/cpuminer \
     && cd /opt/cpuminer \
     && ./autogen.sh \
     && ./configure \
     && make
 
-# Imagem final mínima
-FROM ubuntu:22.04
-COPY --from=builder /opt/cpuminer /opt/cpuminer
+# Definir diretório de trabalho
 WORKDIR /opt/cpuminer
+
+# Variáveis de ambiente padrão
 ENV WALLET_ADDRESS="your_bitcoin_wallet_address_here"
 ENV CPU_THREADS="2"
 ENV POOL_URL="stratum+tcp://solo.ckpool.org:3333"
+
+# Comando para iniciar o minerador
 CMD ["sh", "-c", "./minerd -a sha256d -o ${POOL_URL} -u ${WALLET_ADDRESS} -t ${CPU_THREADS}"]
